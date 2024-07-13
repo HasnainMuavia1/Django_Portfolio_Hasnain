@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %} Home {% endblock %}
+{% load static %}
+{% block content %}
+
+<!-- Navbar section -->
+<!-- Navbar section exit -->
+<style>
+ @media (min-width: 992px) {
+    .custom-padding {
+        padding-top: 14%;
+    }
+}
+
+
+</style>
+ <script>
+        (function() {
+            var savedColor = sessionStorage.getItem('primaryColor');
+            if (savedColor) {
+                var style = document.createElement('style');
+                style.innerHTML = `:root { --primary-color: ${savedColor}; }`;
+                document.head.appendChild(style);
+            }
+        })();
+    </script>
+<!-- Banner section -->
+<section id="home" class="banner_wrapper" style="min-height: 100vh; padding-bottom: 0;">
+  <div class="wrapper">
+    <div id="header" class="content">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 text-center text-md-start">
+                    <div class="header-text">
+                        <img src="{% static 'boss.jpg' %}" class="img-fluid d-block d-sm-block d-md-none custom-img" alt="Hasnain Muavia">
+                        <p class="custom-padding" style="font-size: 1.4rem; color: white">Data Scientist | ML Engineer | DL Engineer</p>
+                        <h1><span id="typed-output"></span></h1>
+                    </div>
+                    <div class="mt-3">
+                        <div class="social-media mb-3">
+                            <a href="https://web.facebook.com/Hasnain.muavia2004" target="_blank"><i class="fa-brands fa-facebook"></i></a>
+                            <a href="https://www.linkedin.com/in/hasnain-muavia-umt2004/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+                            <a href="https://github.com/HasnainMuavia1/" target="_blank"><i class="fa-brands fa-github"></i></a>
+                            <a href="#" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                        </div>
+                        <div class="btn">
+                            <a href="https://drive.usercontent.google.com/download?id=1epa59DT_fcHgwEFMhiWfkgheDEOfCBO6&export=download&authuser=2" target="_blank">Download Resume</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+   </div>
+  </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+<script>
+    var options = {
+        strings: [
+            'Hello, I\'m <span class="Hasnain">Hasnain</span><br><span class="Muavia">Muavia</span>',
+        ],
+        typeSpeed: 30,
+        backSpeed: 30,
+        backDelay: 2000,
+        loop: true,
+        showCursor: true,
+        cursorChar: '|',
+        autoInsertCss: true
+    };
+
+    var typed = new Typed('#typed-output', options);
+</script>
+<!-- Banner section exit -->
+
+{% endblock %}

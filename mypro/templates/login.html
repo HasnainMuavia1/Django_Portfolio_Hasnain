@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %} Login {% endblock %}
+
+{% load static %}
+{% block content %}
+<script>
+        (function() {
+            var savedColor = sessionStorage.getItem('primaryColor');
+            if (savedColor) {
+                var style = document.createElement('style');
+                style.innerHTML = `:root { --primary-color: ${savedColor}; }`;
+                document.head.appendChild(style);
+            }
+        })();
+    </script>
+<style>
+    /* Media query for screens larger than 992px */
+    @media (min-width: 992px) {
+        .custom-padding {
+            padding-top: 11%; /* Adjust as needed */
+        }
+    }
+
+    .contact_wrapper {
+        min-height: 100vh; /* Ensure the section takes up at least the full viewport height */
+        padding-bottom: 50px; /* Adjust padding as needed to create space between content and footer */
+    }
+
+    .clearfix::after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+</style>
+
+<div class="wrapper">
+    <div id="header" class="content">
+    <section id="Login" class="contact_wrapper">
+        <div class="container">
+            <div class="row justify-content-between align-items-center">
+                <div class="col-lg-6 order-2 order-lg-1 pe-lg-5 text-lg-start text-center custom-padding">
+                    <!-- Apply .custom-padding class here -->
+                    <img src="{% static 'boss.jpg' %}" class="img-fluid d-block d-sm-block d-md-block d-lg-none custom-img" alt="Hasnain Muavia">
+                    <h2><span style="color: var(--primary-color)">Login</span> Account</h2>
+                    <form method="post" action="">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <input type="text" class="form-control" name="us" placeholder="Username" autocomplete="off">
+                        </div>
+                        <div class="mb-4">
+                            <input type="password" class="form-control" name="p" placeholder="Password" autocomplete="off">
+                        </div>
+                        <p>{{ error }}</p>
+                        <div class="btn me-4 mt-1">
+                            <button type="submit" class="button-pro" style="background-color: transparent; color: var(--primary-color); border: none; font-size: 18px; font-weight: 500;"
+                                    onmouseover="this.style.color='black'"
+                                    onmouseout="this.style.color='var(--primary-color)'">Login
+                            </button>
+                        </div>
+
+                        <br><br>
+                        <span class="text-white mt-5">If you have forgotten your password, </span><a
+                                href="{% url 'reset_view' %}" style="color: var(--primary-color)">Reset</a>.
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</div>
+{% endblock %}

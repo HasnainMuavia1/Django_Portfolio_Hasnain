@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+     {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <script>
+        (function() {
+            var savedColor = sessionStorage.getItem('primaryColor');
+            if (savedColor) {
+                var style = document.createElement('style');
+                style.innerHTML = `:root { --primary-color: ${savedColor}; }`;
+                document.head.appendChild(style);
+            }
+        })();
+    </script>
+</head>
+<body>
+<div id="header">
+    <div class="login">
+
+        <form action="" method="post" class="login-form2">
+            {% csrf_token %}
+            <h1 class="loh1"><span>Create</span> an Account</h1>
+            <input type="text" name="fn" placeholder="First Name" required="required">
+            <input type="text" name="ln" placeholder="Last Name" required="required">
+            <input type="text" name="us" placeholder="Username" required="required">
+            <input type="email" name="e" placeholder="Email" required="required">
+            <input type="password" name="p" placeholder="Password" required="required">
+            <p>{{error}}</p>
+            <input type="submit" value="Signup">
+            <a href="{% url 'login' %}">
+    <button type="button" >Login</button>
+</a>
+        </form>
+    </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+{% block title %} Login {% endblock %}
+
+{% load static %}
+{% block content %}
+<script>
+        (function() {
+            var savedColor = sessionStorage.getItem('primaryColor');
+            if (savedColor) {
+                var style = document.createElement('style');
+                style.innerHTML = `:root { --primary-color: ${savedColor}; }`;
+                document.head.appendChild(style);
+            }
+        })();
+    </script>
+<style>
+    .custom-padding {
+        padding-top: 14%; /* Adjust as needed */
+    }
+
+    .card-wrapper .card {
+        margin-bottom: .6rem;
+        background-color: rgba(80,78,78,0.32);
+        transition: all 0.3s ease; /* Smooth transition for hover effect */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: .7rem; /* Increased padding for better spacing */
+        height: 8rem; /* Decreased height */
+        min-height: 70%; /* Ensure the card takes full height */
+        box-shadow: 0 0.25rem 0.5rem rgba(0,0,0,0.15); /* Added subtle shadow */
+        width: 9rem; /* Decreased width */
+    }
+
+    .card-wrapper .card:hover {
+        background-color: var(--primary-color)!important;
+        border: none;
+        color: black!important;
+        cursor: pointer;
+        box-shadow: 0 0 1rem var(--primary-color);
+        transform: scale(1.04);
+    }
+
+    .card-wrapper .card .card-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .card-wrapper .card .card-title {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .card-wrapper .card .card-text {
+        font-size: .9rem;
+        margin-bottom: 0;
+    }
+
+    .card-wrapper .card .card-link {
+        text-decoration: none; /* Remove underline */
+        color: inherit; /* Inherit text color */
+        display: block; /* Make the anchor tag behave like a block element */
+        height: 100%; /* Ensure the anchor tag takes full height of the card */
+    }
+
+    /* Adjust card width for large screens */
+    @media (max-width: 700px) {
+        .card-wrapper .card {
+            width: 100%; /* Adjust width as needed */
+            /*height: 100%;*/
+            display: block;
+        }
+    }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+<div class="wrapper">
+    <div id="header" class="content">
+        <script>
+            // Select all elements with the class name 'nav-item'
+            const navItems = document.querySelectorAll('.navbar-nav .nav-item');
+
+            // Remove each nav item
+            navItems.forEach(item => item.remove());
+
+            // Create a new element for 'Logout'
+            const logoutElement = document.createElement('li');
+            logoutElement.className = 'nav-item'; // Add class name if needed
+
+            // Create an anchor element for the logout link
+            const logoutLink = document.createElement('a');
+            logoutLink.textContent = 'Logout ';
+            logoutLink.href = '/logout'; // Set the URL for the logout link
+            logoutLink.className = 'nav-link'; // Add class name if needed
+
+            // Create Font Awesome icon element
+            const iconElement = document.createElement('i');
+            iconElement.className = 'fas fa-right-from-bracket'; // Font Awesome icon class
+
+            // Append icon to logout link
+            logoutLink.appendChild(iconElement);
+
+            // Append the anchor to the list item
+            logoutElement.appendChild(logoutLink);
+
+            // Append the new 'Logout' element to the navbar
+            const navbar = document.querySelector('.navbar-nav');
+            navbar.appendChild(logoutElement);
+        </script>
+        <section id="Dashboard" class="contact_wrapper">
+            <div class="container">
+                <div class="row justify-content-between align-items-center">
+                    <div class="col-lg-6 order-2 order-lg-3 pe-lg-5 text-lg-start text-center custom-padding">
+                        <!-- Apply .custom-padding class here -->
+                        <img src="{% static 'boss.jpg' %}" class="img-fluid d-block d-sm-block d-md-block d-lg-none custom-img" alt="Hasnain Muavia">
+
+                        <div class="row card-wrapper">
+                            <div class="col-lg-4 col-md-6 mb-4">
+                                <a href="{% url 'data' 'skill' %}" class="card text-center text-white">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><i class="fa-solid fa-diagram-project"></i></h5>
+                                        <h5 class="card-text">Skills</h5>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-lg-4 col-md-6 mb-4">
+                                <a href="{% url 'data' 'experience' %}" class="card text-center text-white">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><i class="fa-solid fa-diagram-project"></i></h5>
+                                        <h5 class="card-text">Experience</h5>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-lg-4 col-md-6 mb-4">
+                                <a href="{% url 'data' 'certification' %}" class="card text-center text-white">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><i class="fa-solid fa-diagram-project"></i></h5>
+                                        <h5 class="card-text">Certifications</h5>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-lg-4 col-md-6 mb-4">
+                                <a href="{% url 'data' 'education' %}" class="card text-center text-white">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><i class="fa-solid fa-diagram-project"></i></h5>
+                                        <h5 class="card-text">Education</h5>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+{% endblock %}

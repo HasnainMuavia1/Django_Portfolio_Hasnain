@@ -1,0 +1,474 @@
+{% extends 'base.html' %}
+{% block title %} Login {% endblock %}
+
+{% load static %}
+{% block content %}
+<script>
+        (function() {
+            var savedColor = sessionStorage.getItem('primaryColor');
+            if (savedColor) {
+                var style = document.createElement('style');
+                style.innerHTML = `:root { --primary-color: ${savedColor}; }`;
+                document.head.appendChild(style);
+            }
+        })();
+    </script>
+<!-- Styles -->
+<style>
+
+    .modal-content {
+        background-color: rgba(0, 0, 0, 0.68);
+        color: white;
+        border: none; /* Remove borders */
+        padding: 20px; /* Reduce padding */
+    }
+
+    .modal-content input {
+        background-color: black;
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.2); /* Add a light border */
+    }
+
+    .modal-content input:hover,
+    .modal-content input:focus {
+        border-color: var(--primary-color);
+        color: white;
+        background-color: black;
+    }
+
+    .custom-padding {
+        padding-top: 4%; /* Adjust as needed */
+    }
+
+    .contact_wrapper {
+        min-height: calc(100vh - 50px); /* Ensure the section takes up at least the full viewport height, minus footer height */
+        padding-bottom: 50px; /* Adjust padding as needed to create space between content and footer */
+    }
+
+    .table-wrapper {
+        max-height: 200px;
+        overflow-y: auto;
+        max-width: 700px;
+        margin-bottom: 30px;
+    }
+
+    input {
+        max-width: 500px;
+    }
+
+    .form-wrapper {
+        padding-bottom: 50px; /* Ensure space between form and footer */
+    }
+
+    .action-buttons {
+        display: flex;
+        align-items: center;
+    }
+
+    .action-buttons button {
+        font-size: 10px;
+        padding: 12px;
+        margin-top: 0;
+    }
+
+    .bordered-table {
+        border: 1px solid var(--primary-color);
+        border-collapse: separate;
+    }
+
+    .bordered-table th {
+        background-color: var(--primary-color);
+        /*border: black;*/
+        border: 1px solid black;
+
+
+    }
+
+    .bordered-table th:hover {
+        background-color: var(--primary-color);
+        color: white;
+        border: 1px solid black;
+
+
+    }
+
+    /*.bordered-table th,.bordered-table td{*/
+    /*    border: none;*/
+    /*}*/
+    .action-buttons .separator {
+        color: var(--primary-color);
+        font-size: 1.8rem;
+        margin: 0 5px;
+    }
+
+    /* Ensure header background remains fixed */
+    body {
+        width: 100%;
+        height: 100vh;
+        background-image: url("{{ img2.img.url }}") !important;
+        background-size: 72%;
+        background-position: 25rem;
+        background-repeat: no-repeat;
+        position: absolute; /* Fix the header in place */
+        top: 0; /* Ensure it's at the top of the viewport */
+        z-index: -1; /* Move behind other content */
+    }
+</style>
+
+<!-- Script for Navbar -->
+<script>
+    // JavaScript for modifying the navbar
+    const navItems = document.querySelectorAll('.navbar-nav .nav-item');
+    navItems.forEach(item => item.remove());
+
+    const logoutElement = document.createElement('li');
+    logoutElement.className = 'nav-item';
+
+    const logoutLink = document.createElement('a');
+    logoutLink.textContent = 'Logout ';
+    logoutLink.href = '/logout';
+    logoutLink.className = 'nav-link';
+
+    const iconElement = document.createElement('i');
+    iconElement.className = 'fas fa-right-from-bracket';
+
+    logoutLink.appendChild(iconElement);
+    logoutElement.appendChild(logoutLink);
+
+    const navbar = document.querySelector('.navbar-nav');
+    navbar.appendChild(logoutElement);
+</script>
+
+<!-- Content -->
+<div class="wrapper">
+    <div id="" class="content"></div>
+    <section id="data" class="contact_wrapper custom-padding">
+        <div class="container">
+            <div class="row ">
+                <div class="col-lg-12 text-center text-lg-start">
+                    <div class="my-3 my-lg-0" style="padding-top: 4rem">
+                        <img src="{{ img1.img.url }}" class="img-fluid d-block d-sm-block d-md-none custom-img"
+                             alt="Hasnain Muavia">
+                        <h2><span style="color: var(--primary-color);text-transform: uppercase">{{ name }}</span> Data
+                        </h2>
+                        <div class="table-wrapper text-center bordered-table">
+                            <table class="table table-hover table-borderless text-white custom-hover "
+                                   style="background-color: rgba(0,0,0,0.8) !important;">
+                                <thead>
+                                {% if name == 'education' %}
+                                <tr>
+                                    <th scope="col">Degree</th>
+                                    <th scope="col">Institute</th>
+                                    <th scope="col">Year</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for edu in obj.education.all %}
+                                <tr>
+                                    <td>{{ edu.Degree }}</td>
+                                    <td>{{ edu.institute }}</td>
+                                    <td>{{ edu.year }}</td>
+                                    <td class="action-buttons">
+                                        <a href="{% url 'delete' edu.pk  'education' %}">
+                                            <button type="button" class="btn btn-danger">Delete</button>
+                                        </a>
+                                        <span class="separator">|</span>
+                                        <button type="button" class="btn btn-danger" class="btn btn-primary"
+                                                data-bs-toggle="modal" data-bs-target="#exampleModal{{ edu.pk }}">Edit
+                                        </button>
+                                    </td>
+                                </tr>
+                                <!--                                model form start-->
+
+                                <!-- Modal 1 -->
+                                <div class="modal fade" id="exampleModal{{ edu.pk }}" tabindex="-1"
+                                     aria-labelledby="exampleModalLabel1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel{{ edu.pk }}"><span
+                                                        style="color: var(--primary-color)">{{ name }}</span> Data</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <!-- Modal 1 Form Content -->
+                                                <form method="post" action=" {% url 'edit' edu.pk name %}">
+                                                    {% csrf_token %}
+
+                                                    {% if name == 'education' %}
+                                                    <div class="mb-3">
+                                                        <label for="degree" class="form-label">Degree</label>
+                                                        <input type="text" class="form-control" id="degree"
+                                                               name="degree" placeholder="Degree"
+                                                               value="{{ edu.Degree }}" autocomplete="off">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="institute" class="form-label">Institute</label>
+                                                        <input type="text" class="form-control" id="institute"
+                                                               name="institute" value="{{ edu.institute }}"
+                                                               placeholder="Institute"
+                                                               autocomplete="off">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="year" class="form-label">Year</label>
+                                                        <input type="text" class="form-control" id="year" name="year"
+                                                               placeholder="Year" value="{{ edu.year }}"
+                                                               autocomplete="off">
+                                                    </div>
+                                                    {% endif %}
+
+                                                    <div class="modal-footer">
+                                                        <button type="submit" class="btn btn-primary">Save changes
+                                                        </button>
+                                                        <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">Close
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--                                <model form end-->
+                                {% endfor %}
+                                </tbody>
+                                {% elif name == 'certification' %}
+                                <tr>
+                                    <th scope="col">Certificate</th>
+                                    <th scope="col">Institute</th>
+                                    <th scope="col">Year</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for cert in obj.certifications.all %}
+                                <tr>
+                                    <td>{{ cert.certificate }}</td>
+                                    <td>{{ cert.institution }}</td>
+                                    <td>{{ cert.year }}</td>
+                                    <td class="action-buttons">
+                                        <a href="{% url 'delete' cert.pk 'certification' %}">
+                                            <button type="button" class="btn btn-danger">Delete</button>
+                                        </a>
+                                        <span class="separator">|</span>
+                                        <button type="button" class="btn btn-danger" class="btn btn-primary"
+                                                data-bs-toggle="modal" data-bs-target="#exampleModal{{ cert.pk }}">Edit
+                                        </button>
+                                    </td>
+                                </tr>
+                                <!--                                model form start-->
+
+                                <!-- Modal 2 -->
+                                <div class="modal fade" id="exampleModal{{ cert.pk }}" tabindex="-1"
+                                     aria-labelledby="exampleModalLabel2" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel{{ cert.pk }}"><span
+                                                        style="color: var(--primary-color)">{{ name }}</span> Data</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <!-- Modal 2 Form Content -->
+                                                <form method="post" action=" {% url 'edit' cert.pk name %}">
+                                                    {% csrf_token %}
+
+                                                    {% if name == 'certification' %}
+                                                    <div class="mb-3">
+                                                        <label for="certificate" class="form-label">Certificate</label>
+                                                        <input type="text" class="form-control" id="certificate"
+                                                               name="certificate" value="{{ cert.certificate }}"
+                                                               placeholder="Name" autocomplete="off">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="url" class="form-label">URL</label>
+                                                        <input type="text" class="form-control" id="url" name="url"
+                                                               placeholder="URL" value="{{ cert.url }}"
+                                                               autocomplete="off">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="institution" class="form-label">Institution</label>
+                                                        <input type="text" class="form-control" id="institution"
+                                                               name="institution" value="{{ cert.institution }}"
+                                                               placeholder="Institute"
+                                                               autocomplete="off">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="cert-year" class="form-label">Year</label>
+                                                        <input type="text" class="form-control" id="cert-year"
+                                                               name="year" placeholder="Year" value="{{ cert.year }}"
+                                                               autocomplete="off">
+                                                    </div>
+                                                    {% endif %}
+
+                                                    <div class="modal-footer">
+                                                        <button type="submit" class="btn btn-primary">Save changes
+                                                        </button>
+                                                        <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">Close
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--                                model form end-->
+                                {% endfor %}
+                                </tbody>
+                                {% elif name == 'skill' %}
+                                <tr>
+                                    <th scope="col">Skill</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for sk in obj.skills.all %}
+                                <tr>
+                                    <td>{{ sk.skill_name }}</td>
+                                    <td class="action-buttons">
+                                        <a href="{% url 'delete' sk.pk 'skill' %}">
+                                            <button type="button" class="btn btn-danger">Delete</button>
+                                        </a>
+                                        <span class="separator">|</span>
+
+                                        <button type="button" class="btn btn-danger btn-primary"
+                                                data-bs-toggle="modal" data-bs-target="#exampleModal{{ sk.pk }}">
+                                            Edit
+                                        </button>
+
+                                    </td>
+                                </tr>
+                                <!--                                model form start-->
+                                <!-- Modal 3 -->
+                                <div class="modal fade" id="exampleModal{{ sk.pk }}" tabindex="-1"
+                                     aria-labelledby="exampleModalLabel3" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel{{ sk.pk }}"><span
+                                                        style="color: var(--primary-color)">{{ name }}</span> Data</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <!-- Modal 3 Form Content -->
+                                                <form method="post" action="{% url 'edit' sk.pk name %}">
+                                                    {% csrf_token %}
+                                                    {% if name == 'skill' %}
+                                                    <div class="mb-3">
+                                                        <label for="skill" class="form-label">Skill</label>
+                                                        <input type="text" class="form-control" id="skill" name="skill"
+                                                               placeholder="Skill" value="{{ sk.skill_name }}"
+                                                               autocomplete="off">
+                                                    </div>
+                                                    {% endif %}
+
+                                                    <div class="modal-footer">
+                                                        <button type="submit" class="btn btn-primary">Save changes
+                                                        </button>
+                                                        <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">Close
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <!--                                model form end-->
+                                {% endfor %}
+                                </tbody>
+                                {% endif %}
+                            </table>
+                            <p>{{ msg }}</p>
+                        </div>
+
+                    </div>
+                    <button type="button" class="btn btn-danger btn-primary"
+                            data-bs-toggle="modal" data-bs-target="#add-data-form">
+                        <i class="fas fa-plus"></i> Add data
+                    </button>
+
+                    <div class="modal fade" id="add-data-form" tabindex="-1" aria-labelledby="exampleModalLabeladd"
+                         aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabeladd"><span
+                                            style="color: var(--primary-color)">{{ name }}</span> Data</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- Modal 3 Form Content -->
+                                    <form method="post" action="">
+                                        {% csrf_token %}
+                                        <div class="form-wrapper">
+                                            {% if name == 'education' %}
+                                            <div class="mb-4">
+                                                <input type="text" class="form-control" name="degree"
+                                                       placeholder="Degree" autocomplete="off">
+                                            </div>
+                                            <div class="mb-4">
+                                                <input type="text" class="form-control" name="institute"
+                                                       placeholder="Institute" autocomplete="off">
+                                            </div>
+                                            <div class="mb-4">
+                                                <input type="text" class="form-control" name="year" placeholder="Year"
+                                                       autocomplete="off">
+                                            </div>
+                                            {% elif name == 'skill' %}
+                                            <div class="mb-4">
+                                                <input type="text" class="form-control" name="skill" placeholder="Skill"
+                                                       autocomplete="off">
+                                            </div>
+                                            {% elif name == 'certification' %}
+                                            <div class="mb-4">
+                                                <input type="text" class="form-control" name="certificate"
+                                                       placeholder="Name" autocomplete="off">
+                                            </div>
+                                            <div class="mb-4">
+                                                <input type="text" class="form-control" name="url" placeholder="URL"
+                                                       autocomplete="off">
+                                            </div>
+                                            <div class="mb-4">
+                                                <input type="text" class="form-control" name="institution"
+                                                       placeholder="Institute" autocomplete="off">
+                                            </div>
+                                            <div class="mb-4">
+                                                <input type="text" class="form-control" name="year" placeholder="Year"
+                                                       autocomplete="off">
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                Close
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                </div>
+
+            </div>
+
+    </section>
+
+
+</div>
+
+
+{% endblock %}
